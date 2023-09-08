@@ -503,18 +503,20 @@ RPSChoice makeRPSChoice(){
   // fixed choice implementation
   RPSChoice choice;
   if (roundsPlayed == 0){
-    choice = RPS_Paper;
+    choice = RPS_Paper; // if first round, plays paper
   } 
   if (roundsPlayed > 0){
     if (roundResults[roundsPlayed - 1] == Round_Won){
-      choice = opponentChoices[roundsPlayed - 1];
-    } if (roundResults[roundsPlayed - 1] == Round_Lost){
-      choice = winningChoiceAgainst(arduinoChoices[roundsPlayed - 1]);
-    } else if (roundResults[roundsPlayed - 1] == Round_Draw){
-      choice = arduinoChoices[roundsPlayed - 1];
+      choice = opponentChoices[roundsPlayed - 1]; // if last round was won, plays opponents choice from last round
+    } 
+    if (roundResults[roundsPlayed - 1] == Round_Lost){
+      choice = winningChoiceAgainst(arduinoChoices[roundsPlayed - 1]); // if last round was lost, plays winning choice from last round
+    } 
+    if (roundResults[roundsPlayed - 1] == Round_Draw){
+      choice = arduinoChoices[roundsPlayed - 1]; // if round was draw, plays smae choice from last round
     }
   }
-  return choice;
+  return choice; // returns choice
 }
 //******************************************************************
 //******************************************************************
