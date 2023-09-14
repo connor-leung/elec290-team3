@@ -1,4 +1,5 @@
 #include "Arduino.h"
+#include "stdlib.h"
 
 /*
   Configure the pins for the buttons and LEDS here
@@ -464,6 +465,16 @@ RPSChoice winningChoiceAgainst(RPSChoice choice){
     Returns the RPS choice that wins against choice.
     e.g. winningChoiceAgainst(RPS_Rock) = RPS_Paper
   */
+  // switch(choice){
+  //   case RPS_Rock:
+  //     return RPS_Paper;
+  //   case RPS_Paper:
+  //     return RPS_Scissors;
+  //   case RPS_Scissors:
+  //     return RPS_Rock;
+  // }
+
+
   return (RPSChoice)((choice+1) % 3);
 }
 
@@ -472,70 +483,24 @@ RPSChoice losingChoiceAgainst(RPSChoice choice){
     Returns the RPS choice that loses against choice.
     e.g. losingChoiceAgainst(RPS_Rock) = RPS_Scissors
   */
-  return (RPSChoice)((choice-1) % 3);
+  if(choice == RPS_Rock) {
+    return RPS_Scissors;
+  } else if (choice == RPS_Paper) {
+    return RPS_Rock;
+  } else {
+    return RPS_Paper;
+  }
+
+
+  // return (RPSChoice)((choice-1) % 3);
 }
 
 //******************************************************************
 // TODO Modify this function
 //******************************************************************
 
-RPSChoice counterOpponent(int oppChoice, int myChoice){
-  /* 
-    RPS_Rock = 0,
-    RPS_Paper = 1,
-    RPS_Scissors = 2
-  */
-
-  //rock
-  if (myChoice == 0) {
-    
-    //if rock then rock
-    if (oppChoice == 0) {
-      return RPS_Rock;
-    }
-
-    //if paper then paper
-    if (oppChoice == 1) {
-      return RPS_Paper;
-    }
-    //if scissors then scissors
-    if (oppChoice == 2) {
-      return RPS_Scissors;
-    }
-  }
-
-  //paper
-  if (myChoice == 1) {
-    //rock
-    if (oppChoice == 0) {
-      return RPS_Rock;
-    }
-    //paper
-    if (oppChoice == 1) {
-      return RPS_Paper;
-    }
-    //scissors
-    if (oppChoice == 2) {
-      return RPS_Scissors;
-    }
-  }
-
-  //scissors
-  if (myChoice == 2) {
-    //rock
-    if (oppChoice == 0) {
-      return RPS_Rock;
-    }
-    //paper
-    if (oppChoice == 1) {
-      return RPS_Paper;
-    }
-    //scissors
-    if (oppChoice == 2) {
-      return RPS_Scissors;
-    }
-  }
-
+RPSChoice winReplay(int rounds){
+  return arduinoChoices[rounds];
 }
 
 RPSChoice makeRPSChoice(){
@@ -557,18 +522,35 @@ RPSChoice makeRPSChoice(){
       RPSChoiceToStr
       RoundResToWinner
   */
-
-
-  // fixed choice implementation
-  int counter = 1;
-  RPSChoice choice;
-  choice = RPS_Paper;
-  if (counter > 1) {
-    choice = counterOpponent(opponentChoices[counter], arduinoChoices[counter]);
-    counter++;
+  int counter = 0;
+  if(roundsPlayed == 0) {
+    return RPS_Paper;
   }
+  int moveDecider = rand()*101;
+  if(roundResults[roundsPlayed] == Round_Won && counter == 0){
+    counter++;
+    return winReplay(roundsPlayed);
+  } 
+  else if (moveDecider > 80) {
+    counter = 0;
+    return winningChoiceAgainst(opponentChoices[roundsPlayed]);
+  } else if (moveDecider > 40){
+    counter = 0;
+    return losingChoiceAgainst(opponentChoices[roundsPlayed]);
+  } 
+  else {
+    counter = 0;
+    return randRPS();
+  } 
+  
 
-  return choice;
+  //  if(opponentChoices[roundsPlayed] == RPS_Rock) {
+  //   return opponentChoices[roundsPlayed] + 1;
+  // } else if (opponentChoices[roundsPlayed] == RPS_Paper) {
+  //   return opponentChoices[roundsPlayed] + 1;
+  // } else {
+  //   return opponentChoices[roundsPlayed] * 0;
+  // }
 }
 //******************************************************************
 //******************************************************************
