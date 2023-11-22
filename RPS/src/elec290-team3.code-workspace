@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "../.."
+		},
+		{
+			"name": "RPS",
+			"path": ".."
+		}
+	],
+	"settings": {}
+}
