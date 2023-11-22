@@ -6,6 +6,10 @@ WiFiServer server(80);
 
 const int ledPin = 7;
 
+// Placeholder variables for sensor values
+float pHValue = 7.0; // Replace with actual pH sensor reading
+float conductivityValue = 500; // Replace with actual conductivity sensor reading
+
 void setup() {
   Serial.begin(9600);
 
@@ -45,9 +49,22 @@ void loop() {
   }
 }
 
+// Placeholder function for reading pH value
+float readPHSensor() {
+  // Replace this with actual code to read pH sensor value
+  return 7.0;
+}
+
+// Placeholder function for reading conductivity value
+float readConductivitySensor() {
+  // Replace this with actual code to read conductivity sensor value
+  return 500;
+}
+
 void serveMainPage(WiFiClient client) {
-  // Read the state of digital pin 7
-  int pinState = digitalRead(ledPin);
+  // Update sensor readings using placeholder functions
+  pHValue = readPHSensor();
+  conductivityValue = readConductivitySensor();
 
   // Send the HTTP response
   client.println("HTTP/1.1 200 OK");
@@ -56,6 +73,8 @@ void serveMainPage(WiFiClient client) {
   client.println();
   client.println("<html><body>");
   client.println("<h1>Arduino Web Server</h1>");
-  client.println("<p>State of Pin 7: " + String(pinState) + "</p>");
+  client.println("<p>pH Value: " + String(pHValue, 2) + "</p>");
+  client.println("<p>Conductivity Value: " + String(conductivityValue) + "</p>");
   client.println("</body></html>");
 }
+
