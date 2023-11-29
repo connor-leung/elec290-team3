@@ -12,11 +12,9 @@ GravityTDS gravityTds;
  
 float temperature = 25,tdsValue = 0;
 
-char ssid[] = "ArduinoAP";
+char ssid[] = "Heavy Metal Detector";
 char pass[] = "password123";
 WiFiServer server(80);
-
-//const int ledPin = 7;
 
 // Placeholder variables for sensor values
 float pHValue = 7.0; // Replace with actual pH sensor reading
@@ -35,8 +33,6 @@ void setup() {
 
   Serial.println("Access Point created");
 
-  // Set pin 7 as an output
-  pinMode(ledPin, OUTPUT);
 
   // Start the server
   server.begin();
@@ -91,7 +87,7 @@ float readPHSensor() {
   }
 
   float phValue = (float)avgValue * 5.0 / 1024 / 6;
-  phValue = 3.5 * phValue;
+  phValue = 3.5 * phValue + 6;
 
   Serial.print("    pH:");
   Serial.print(phValue, 2);
@@ -115,20 +111,32 @@ float readConductivitySensor() {
   return tdsValue;
 }
 
+String check = "Not safe to drink";
+
 void serveMainPage(WiFiClient client) {
   // Update sensor readings using placeholder functions
   pHValue = readPHSensor();
   conductivityValue = readConductivitySensor();
-
+  if((pHValue > 6 && pHValue < 8) && (conductivityValue > 1000 && conductivityValue < 2500)) {
+    check = "Safe to drink";
+  }
+  else {
+    check = "Not safe to drink";
+  }
   // Send the HTTP response
   client.println("HTTP/1.1 200 OK");
   client.println("Content-Type: text/html");
   client.println("Connection: close");
   client.println();
-  client.println("<html><body>");
-  client.println("<h1>Arduino Web Server</h1>");
+  client.println("<html><head>");
+  client.println("<meta charset=\"UTF-8\">");
+  client.println("<meta http-equiv=\"refresh\" content=\"5\">");
+  client.println("</head>");
+  client.println("<body>");
+  client.println("<h1>Heavy Metal Detector</h1>");
   client.println("<p>pH Value: " + String(pHValue, 2) + "</p>");
   client.println("<p>Conductivity Value: " + String(conductivityValue) + "</p>");
+  client.println("<p>" + check + "</p>");
   client.println("</body></html>");
 
   delay(1000);
