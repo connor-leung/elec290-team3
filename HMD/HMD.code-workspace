@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"name": "Data to Webserver",
+			"path": "../Data to Webserver"
+		}
+	],
+	"settings": {}
+}
